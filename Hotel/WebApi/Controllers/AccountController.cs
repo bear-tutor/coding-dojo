@@ -65,5 +65,64 @@ namespace WebApi.Controllers
                 Message = isFound ? "Login สำเร็จ" : "Username หรือ Password ไม่ถูก"
             };
         }
-    }
+
+        // GET api/values
+        [HttpGet]
+        public IEnumerable<AccountInfo> Get()
+        {
+            return accounts;
+        }
+
+        // DELETE api/values/5
+        [HttpDelete]
+        public void Delete(AccountInfo rrr)
+        {
+            var DeleteAccount = accounts.Find(it => it.Id == rrr.Id);
+            accounts.Remove(DeleteAccount);
+        }
+
+        // PUT api/values
+        [HttpPut]
+        public ChangeUsername Put([FromBody] AccountInfo value)
+        {
+
+            var findid = accounts.FirstOrDefault(it => it.Id == value.Id);
+            accounts.Remove(findid);
+
+
+
+            if (findid == null)
+            {
+                return new ChangeUsername
+                {
+                    IsSuccess = false,
+                    Message = "ทำรายการไม่สำเร็จ ตรวจสอบใหม่"
+
+                };
+            }
+            else
+            {
+                var b = new AccountInfo
+                {
+                    Id = value.Id,
+                    Username = value.Username,
+                    Password = value.Password
+                };
+                accounts.Add(b);
+                return new ChangeUsername
+                {
+                    IsSuccess = true,
+                    Message = "ทำรายการสำเร็จ "
+
+                };
+
+            }
+        }
+
+    }    
+
 }
+
+        
+   
+
