@@ -87,9 +87,7 @@ namespace WebApi.Controllers
         {
 
             var findid = accounts.FirstOrDefault(it => it.Id == value.Id);
-            accounts.Remove(findid);
-
-
+            
 
             if (findid == null)
             {
@@ -102,27 +100,43 @@ namespace WebApi.Controllers
             }
             else
             {
-                var b = new AccountInfo
+                if (value.Username.Length >= 4 && value.Password.Length >= 4)
                 {
-                    Id = value.Id,
-                    Username = value.Username,
-                    Password = value.Password
-                };
-                accounts.Add(b);
-                return new ChangeUsername
-                {
-                    IsSuccess = true,
-                    Message = "ทำรายการสำเร็จ "
+                    var b = new AccountInfo
+                    {
+                        Id = value.Id,
+                        Username = value.Username,
+                        Password = value.Password
+                    };
+                    accounts.Remove(findid);
+                    accounts.Add(b);
 
-                };
+                    return new ChangeUsername
+                    {
+                        IsSuccess = true,
+                        Message = "ทำรายการสำเร็จ "
+
+                    };
+                }
+                else
+                {
+                    return new ChangeUsername
+                    {
+                        IsSuccess = false,
+                        Message = "ทำรายการไม่สำเร็จ ตรวจสอบใหม่"
+
+                    };
+
+                }
+
 
             }
         }
 
-    }    
+    }
 
 }
 
-        
-   
+
+
 
