@@ -65,5 +65,93 @@ namespace WebApi.Controllers
                 Message = isFound ? "Login สำเร็จ" : "Username หรือ Password ไม่ถูก"
             };
         }
+
+        [HttpGet]
+        public IEnumerable<GetAccountsResult> Get()
+        {
+            return accounts.Select(it => new GetAccountsResult
+            {
+                Id = it.Id,
+                Username = it.Username,
+            });
+        }
+
+        [HttpPut]
+        public EditAccountResult Put([FromBody] AccountInfo value)
+        {
+            var areArgumentsValid = value != null
+                && !string.IsNullOrWhiteSpace(value.Id)
+                && !string.IsNullOrWhiteSpace(value.Username)
+                && !string.IsNullOrWhiteSpace(value.Password)
+                && value.Username.Length > 4
+                && value.Password.Length > 4;
+
+            if (!areArgumentsValid)
+            {
+                return new EditAccountResult
+                {
+                    IsSuccess = false,
+                    Message = "Username หรือ Password ไม่ถูกต้อง"
+                };
+            }
+
+            var selectedAccount = accounts.FirstOrDefault(it => it.Id == value.Id);
+            if (selectedAccount == null)
+            {
+                return new EditAccountResult
+                {
+                    IsSuccess = false,
+                    Message = "ไม่พบบัญชีผู้ใช้"
+                };
+            }
+
+            var isChangedPasswordOnly = selectedAccount.Username == value.Username && selectedAccount.Password != value.Password;
+            var isChangedUsernameOnly = selectedAccount.Password == value.Password && selectedAccount.Username != value.Username;
+
+            if (isChangedPasswordOnly)
+            {
+                // Password only
+                selectedAccount.Password = value.Password;
+            }
+            else if (isChangedUsernameOnly)
+            {
+                // Username
+                selectedAccount.Username = value.Username;
+            }
+            else
+            {
+                // Username & Password
+                selectedAccount.Username = value.Username;
+                selectedAccount.Password = value.Password;
+            }
+
+            return new EditAccountResult
+            {
+                IsSuccess = true,
+                Message = string.Empty
+            };
+        }
+
+        [HttpDelete("{id}")]
+        public DeleteAccountResult Delete(string id)
+        {
+            var selectedAccount = accounts.FirstOrDefault(it => it.Id == id);
+            if (selectedAccount == null)
+            {
+                return new DeleteAccountResult
+                {
+                    IsSuccess = false,
+                    Message = "ไม่พบบัญชีที่เลือก"
+                };
+            }
+
+            accounts.Remove(selectedAccount);
+
+            return new DeleteAccountResult
+            {
+                IsSuccess = true,
+                Message = string.Empty
+            };
+        }
     }
 }
