@@ -6,6 +6,9 @@
 1. เมื่อจะเริ่มทำ feature ไหนก็ตาม ให้แตก branch ใหม่เป็นชื่อ feature นั้นๆก่อนเสมอ แล้วทำงานใน branch นั้น
 1. เมื่อต้องการส่งงานให้ทำ pull request จาก branch ที่ทำงานเข้ามา
 
+## Exercises
+1. [LinQ exercises, สนามฝึก LinQ](LinQExercises/README.md)
+
 ## Projects
 1. [Hotel, ระบบจองโรงแรม](Hotel/README.md)
 1. [Online shopping, ระบบซื้อของออนไลน์](OnlineShopping/README.md)
