@@ -18,9 +18,21 @@ namespace WebApi.Controllers
             ExamResults = new List<ExamResultInfo>();
         }
 
-        // TODO: Create new exam result
-        
-        // TODO: (Optional) Get all exam results
+        // Create new exam result
+        [HttpPost]
+        public void Post([FromBody]ExamResultInfo examResult)
+        {
+            examResult.Id = Guid.NewGuid().ToString();
+            ExamResults.Add(examResult);
+        }
+
+        // Get all exam results
+        [HttpGet]
+        public IEnumerable<ExamResultInfo> Get()
+        {
+            return ExamResults;
+        }
+
         // TODO: (Optional) Update exam result by Id
         // TODO: (Optional) Delete exam result by Id
     }

@@ -42,9 +42,21 @@ namespace WebApi.Controllers
             };
         }
 
-        // TODO: Create new course
+        // Create new course
+        [HttpPost]
+        public void Post([FromBody]CourseInfo newCourse)
+        {
+            newCourse.Id = Guid.NewGuid().ToString();
+            Courses.Add(newCourse);
+        }
 
-        // TODO: (Optional) Get all courses
+        // Get all courses
+        [HttpGet]
+        public IEnumerable<CourseInfo> Get()
+        {
+            return Courses;
+        }
+
         // TODO: (Optional) Update course by Id
         // TODO: (Optional) Delete course by Id
     }
